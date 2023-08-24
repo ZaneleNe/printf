@@ -1,0 +1,87 @@
+#include <stdarg.h>
+#include "main.h"
+
+/**
+ * _printf - A function that produces output according to a format
+ * @format: input character string for _printf
+ * Return: The number of characters printed
+ */
+
+int _printf(const char *format, ...)
+{
+	int zee_index, zee_count = 0, zee_str_count;
+	va_list zee_list;
+
+	if (!format)
+		return (-1);
+	va_start(zee_list, format);
+	for (zee_index = 0; format[zee_index] != '\0'; zee_index++)
+	{
+		if (format[zee_index] != '%')
+		{
+			zee_putchar(format[zee_index]), zee_count++;
+		}
+		else
+		{
+			if (format[zee_index + 1] == '\0')
+				return (-1);
+			else if (case_func(format[zee_index + 1]) != NULL)
+				zee_count += (case_func(format[zee_index + 1])(zee_list)), zee_index++;
+			else
+			{
+				switch (format[zee_index + 1])
+				{
+					case 'c':
+						zee_putchar(va_arg(zee_list, int)), zee_index++, zee_count++;
+						break;
+					case 's':
+						zee_str_count = zee_puts(va_arg(bns_list, char *));
+						zee_index++, zee_count += zee_str_count;
+						break;
+					case '%':
+						zee_putchar('%'), zee_index++, zee_count++;
+						break;
+					default:
+						zee_putchar(format[zee_index]), zee_count++;
+				}
+			}
+		}
+	}
+	va_end(zee_list);
+	return (zee_count);
+}
+
+/**
+ * case_func - A function that checks format specifers
+ * @y: Character input to be evaluated
+ * Return:0 (Success)
+ */
+int (*case_func(const char y))(va_list)
+{
+	zee_print_f zee_print[] = {
+		{'i', print_num},
+		{'d', print_num},
+		{'b', print_bin},
+		{'u', print_unsigned},
+		{'o', print_octal},
+		{'x', print_hexadecimal},
+		{'X', print_HEX},
+		{'p', print_pointer},
+		{'S', print_string},
+		{'r', printf_string_reverse},
+		{'R', print_rot13},
+		{'\0', NULL}
+	};
+	int zee_index;
+
+	zee_index = 0;
+	while ((zee_print[zee_index].zee_ptr) != '\0')
+	{
+		if (zee_print[zee_index].zee_ptr == y)
+		{
+			return (zee_print[zee_index].zee_func);
+		}
+		zee_index++;
+	}
+	return (0);
+}

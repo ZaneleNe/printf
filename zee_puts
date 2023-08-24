@@ -1,0 +1,29 @@
+#include "main.h"
+#include <unistd.h>
+
+/**
+ * zee_puts - A function that prints a string of characters
+ * @str: The string input to be printed
+ * Return: Size of str
+ */
+
+int zee_puts(char *str)
+{
+	int zee_index,  zee_count = 0;
+
+	if (str == NULL)
+	{
+		write(1, "(null)", 6);
+		return (6);
+	}
+	else
+	{
+		for (zee_index = 0; str[zee_index] != '\0'; zee_index++)
+		{
+			zee_putchar(str[zee_index]);
+			zee_count++;
+		}
+	}
+
+	return (zee_count);
+}
